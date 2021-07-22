@@ -1,8 +1,15 @@
 import 'dart:async';
 
+import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:solodrive_v2/screen/music_screen.dart';
+import 'package:solodrive_v2/widgets/app_drawer.dart';
+
+import 'call_screen.dart';
+import 'favourite_screen.dart';
+import 'home_screen.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -12,44 +19,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  int _selectedIndex = 1;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Map',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Call',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Music',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 4: Star',
-      style: optionStyle,
-    ),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if (_selectedIndex == 3) {
-        Navigator.pushNamed(context, '/six');
-      } else if (_selectedIndex == 2) {
-        Navigator.pushNamed(context, '/seven');
-      } else if (_selectedIndex == 4) {
-        Navigator.pushNamed(context, '/nine');
-      }
-    });
-  }
+  GlobalKey bottomNavigationKey = GlobalKey();
 
   late String _timeString;
 
@@ -77,7 +47,6 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xff4885ED),
         toolbarHeight: 40,
         title: Row(
@@ -101,38 +70,8 @@ class _MapScreenState extends State<MapScreen> {
         label: const Text('To the lake!'),
         icon: const Icon(Icons.directions_boat),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: Color(0xff111010),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map_outlined),
-            label: 'Map',
-            backgroundColor: Color(0xFF444974),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.call),
-            label: 'Call',
-            backgroundColor: Color(0xFF2D2F41),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.headphones),
-            label: 'Music',
-            backgroundColor: Color(0xFF242634),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Star',
-            backgroundColor: Color(0xFF402840),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xff888787),
-        onTap: _onItemTapped,
-      ),
+      drawer: appDrawer(),
+      bottomNavigationBar: buildFancyBottomNavigation(context),
     );
   }
 
@@ -151,5 +90,55 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  }
+
+  FancyBottomNavigation buildFancyBottomNavigation(BuildContext context) {
+    return FancyBottomNavigation(
+      circleColor: Color(0xffFDFDFD),
+      activeIconColor: Color(0xff3CBA54),
+      inactiveIconColor: Color(0xffA4A4A4),
+      tabs: [
+        TabData(
+          iconData: Icons.home,
+          title: "Home",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+          ),
+        ),
+        TabData(
+          iconData: Icons.call,
+          title: "Call",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => CallScreen(),
+            ),
+          ),
+        ),
+        TabData(
+          iconData: Icons.music_note_outlined,
+          title: "Music",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MusicScreen(),
+            ),
+          ),
+        ),
+        TabData(
+          iconData: Icons.favorite,
+          title: "Favourite",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => FavouriteScreen(),
+            ),
+          ),
+        ),
+      ],
+      key: bottomNavigationKey,
+      onTabChangedListener: (position) {
+        setState(() {});
+      },
+    );
   }
 }

@@ -1,7 +1,14 @@
 import 'dart:async';
 
+import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:solodrive_v2/widgets/app_drawer.dart';
+
+import 'call_screen.dart';
+import 'home_screen.dart';
+import 'map_screen.dart';
+import 'music_screen.dart';
 
 class FavouriteScreen extends StatefulWidget {
   const FavouriteScreen({Key? key}) : super(key: key);
@@ -11,47 +18,7 @@ class FavouriteScreen extends StatefulWidget {
 }
 
 class _FavouriteScreenState extends State<FavouriteScreen> {
-  int _selectedIndex = 4;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Map',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Call',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Music',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 4: Star',
-      style: optionStyle,
-    ),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if (_selectedIndex == 1) {
-        Navigator.pushNamed(context, '/six');
-      } else if (_selectedIndex == 2) {
-        Navigator.pushNamed(context, '/seven');
-      } else if (_selectedIndex == 3) {
-        Navigator.pushNamed(context, '/eight');
-      }
-      {
-        Navigator.pushNamed(context, '/nine');
-      }
-    });
-  }
+  GlobalKey bottomNavigationKey = GlobalKey();
 
   late String _timeString;
 
@@ -65,7 +32,6 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xff4885ED),
         toolbarHeight: 40,
         title: Row(
@@ -212,52 +178,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Image.asset('images/call.png'),
-            )
-          ],
-        ),
-      ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //       backgroundColor: Color(0xff111010),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.map_outlined),
-      //       label: 'Map',
-      //       backgroundColor: Color(0xFF444974),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.call),
-      //       label: 'Call',
-      //       backgroundColor: Color(0xFF2D2F41),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.headphones),
-      //       label: 'Music',
-      //       backgroundColor: Color(0xFF242634),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.star),
-      //       label: 'Star',
-      //       backgroundColor: Color(0xFF402840),
-      //     ),
-      //   ],
-      //   currentIndex: _selectedIndex,
-      //   selectedItemColor: Color(0xff888787),
-      //   onTap: _onItemTapped,
-      //   // onTap: _onItemTapped,
-      // ),
+      drawer: appDrawer(),
+      bottomNavigationBar: buildFancyBottomNavigation(context),
     );
   }
 
@@ -271,5 +193,55 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
 
   String _formatDateTime(DateTime dateTime) {
     return DateFormat('hh:mm').format(dateTime);
+  }
+
+  FancyBottomNavigation buildFancyBottomNavigation(BuildContext context) {
+    return FancyBottomNavigation(
+      circleColor: Color(0xffFDFDFD),
+      activeIconColor: Color(0xff3CBA54),
+      inactiveIconColor: Color(0xffA4A4A4),
+      tabs: [
+        TabData(
+          iconData: Icons.home,
+          title: "Home",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+          ),
+        ),
+        TabData(
+          iconData: Icons.map_outlined,
+          title: "Map",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MapScreen(),
+            ),
+          ),
+        ),
+        TabData(
+          iconData: Icons.call,
+          title: "Call",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => CallScreen(),
+            ),
+          ),
+        ),
+        TabData(
+          iconData: Icons.music_note_outlined,
+          title: "Music",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MusicScreen(),
+            ),
+          ),
+        ),
+      ],
+      key: bottomNavigationKey,
+      onTabChangedListener: (position) {
+        setState(() {});
+      },
+    );
   }
 }

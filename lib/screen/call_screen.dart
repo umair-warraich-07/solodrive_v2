@@ -1,11 +1,16 @@
 import 'dart:async';
 
-import 'package:dotted_border/dotted_border.dart';
+import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:solodrive_v2/brain/call_card.dart';
-import '../colors_code.dart';
+import 'package:solodrive_v2/widgets/app_drawer.dart';
+
+import 'favourite_screen.dart';
+import 'home_screen.dart';
+import 'map_screen.dart';
+import 'music_screen.dart';
 
 class CallScreen extends StatefulWidget {
   const CallScreen({Key? key}) : super(key: key);
@@ -15,44 +20,7 @@ class CallScreen extends StatefulWidget {
 }
 
 class _CallScreenState extends State<CallScreen> {
-  int _selectedIndex = 2;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Map',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Call',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Music',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 4: Star',
-      style: optionStyle,
-    ),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if (_selectedIndex == 1) {
-        Navigator.pushNamed(context, '/six');
-      } else if (_selectedIndex == 3) {
-        Navigator.pushNamed(context, '/eight');
-      } else if (_selectedIndex == 4) {
-        Navigator.pushNamed(context, '/nine');
-      }
-    });
-  }
+  GlobalKey bottomNavigationKey = GlobalKey();
 
   late String _timeString;
 
@@ -67,7 +35,6 @@ class _CallScreenState extends State<CallScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xff4885ED),
         toolbarHeight: 40,
         title: Row(
@@ -79,173 +46,296 @@ class _CallScreenState extends State<CallScreen> {
           ],
         ),
       ),
-      body: DottedBorder(
-        strokeWidth: 3,
-        color: CustomColors.clockOutline,
-        borderType: BorderType.RRect,
-        radius: const Radius.circular(24),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 36,
-                    width: 200,
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      style: const TextStyle(fontSize: 15),
-                      decoration: InputDecoration(
-                        filled: true,
-                        prefixIcon:
-                            const Icon(Icons.search, color: Color(0xffF24747)),
-                        border: const OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30))),
-                        fillColor:
-                            Theme.of(context).inputDecorationTheme.fillColor,
-                        contentPadding: EdgeInsets.zero,
-                        hintText: 'Search',
-                      ),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 36,
+                  width: 200,
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    style: const TextStyle(fontSize: 15),
+                    decoration: InputDecoration(
+                      filled: true,
+                      prefixIcon:
+                          const Icon(Icons.search, color: Color(0xffF24747)),
+                      border: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                      fillColor:
+                          Theme.of(context).inputDecorationTheme.fillColor,
+                      contentPadding: EdgeInsets.zero,
+                      hintText: 'Search',
                     ),
                   ),
-                  IconButton(
-                    iconSize: 30,
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.keyboard_voice_rounded,
-                      color: Colors.red,
-                    ),
+                ),
+                IconButton(
+                  iconSize: 30,
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.keyboard_voice_rounded,
+                    color: Colors.red,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Image.asset(
-              'images/call.png',
-              height: 100,
-              width: 100,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Text(
-              'Favourite',
+          ),
+          Image.asset(
+            'images/call.png',
+            height: 100,
+            width: 100,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              'Favorites',
               style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF444974),
-              ),
+                  fontSize: 30,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff7E7D7D)),
             ),
-            Expanded(
-              child: ListView(
-                children: _favourite.map((_favourite) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 32),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: _favourite.gradientColors,
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 8,
-                          spreadRadius: 2,
-                          offset: Offset(4, 4),
-                        ),
-                      ],
-                      borderRadius: BorderRadius.all(Radius.circular(24)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                SizedBox(width: 8),
-                                Text(
-                                  '${_favourite.contactName}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          _favourite.callIcon,
-                          size: 36,
-                          color: Colors.white,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(
-                              _favourite.messageIcon,
-                              size: 36,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            color: Color(0xffEEEEEE),
+            height: 75,
+            child: Row(
+              children: [
+                Image.asset('images/contac_image.png'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Rachael Smith',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(
+                  width: 85,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.call,
+                    color: Color(0xff3CBA54),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.message_rounded,
+                    color: Color(0xff0EA8FF),
+                  ),
+                ),
+              ],
             ),
-            const Text(
+          ),
+          Container(
+            color: Color(0xffEEEEEE),
+            height: 75,
+            child: Row(
+              children: [
+                Image.asset('images/contac_image.png'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Lyndsay Faber',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(
+                  width: 85,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.call,
+                    color: Color(0xff3CBA54),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.message_rounded,
+                    color: Color(0xff0EA8FF),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Color(0xffEEEEEE),
+            height: 75,
+            child: Row(
+              children: [
+                Image.asset('images/contac_image.png'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'creRACHions',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(
+                  width: 85,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.call,
+                    color: Color(0xff3CBA54),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.message_rounded,
+                    color: Color(0xff0EA8FF),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
               'Contact',
               style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF444974),
-              ),
+                  fontSize: 30,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff7E7D7D)),
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: Color(0xff111010),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map_outlined),
-            label: 'Map',
-            backgroundColor: Color(0xFF444974),
+          Container(
+            color: Color(0xffEEEEEE),
+            height: 75,
+            child: Row(
+              children: [
+                Image.asset('images/contac_image.png'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Rachael Smith',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(
+                  width: 85,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.call,
+                    color: Color(0xff3CBA54),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.message_rounded,
+                    color: Color(0xff0EA8FF),
+                  ),
+                ),
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.call),
-            label: 'Call',
-            backgroundColor: Color(0xFF2D2F41),
+          Container(
+            color: Color(0xffEEEEEE),
+            height: 75,
+            child: Row(
+              children: [
+                Image.asset('images/contac_image.png'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Lyndsay Faber',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(
+                  width: 85,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.call,
+                    color: Color(0xff3CBA54),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.message_rounded,
+                    color: Color(0xff0EA8FF),
+                  ),
+                ),
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.headphones),
-            label: 'Music',
-            backgroundColor: Color(0xFF242634),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Star',
-            backgroundColor: Color(0xFF402840),
+          Container(
+            color: Color(0xffEEEEEE),
+            height: 75,
+            child: Row(
+              children: [
+                Image.asset('images/contac_image.png'),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'creRACHions',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(
+                  width: 85,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.call,
+                    color: Color(0xff3CBA54),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.message_rounded,
+                    color: Color(0xff0EA8FF),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xff888787),
-        onTap: _onItemTapped,
       ),
+      drawer: appDrawer(),
+      bottomNavigationBar: buildFancyBottomNavigation(context),
     );
   }
 
@@ -260,37 +350,54 @@ class _CallScreenState extends State<CallScreen> {
   String _formatDateTime(DateTime dateTime) {
     return DateFormat('hh:mm').format(dateTime);
   }
-}
 
-List<CallCard> _favourite = [
-  CallCard('Umair Sajid', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sea),
-  CallCard('Shoaib Sajid', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sky),
-  CallCard('Hassan Ali', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sunset),
-  CallCard('Umair Sajid', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sea),
-  CallCard('Shoaib Sajid', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sky),
-  CallCard('Hassan Ali', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sunset),
-  CallCard('Umair Sajid', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sea),
-  CallCard('Shoaib Sajid', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sky),
-  CallCard('Hassan Ali', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sunset),
-  CallCard('Umair Sajid', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sea),
-  CallCard('Shoaib Sajid', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sky),
-  CallCard('Hassan Ali', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sunset),
-  CallCard('Umair Sajid', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sea),
-  CallCard('Shoaib Sajid', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sky),
-  CallCard('Hassan Ali', Icons.call, Icons.message_outlined,
-      Image.asset('images/call.png'), GradientColors.sunset),
-];
+  FancyBottomNavigation buildFancyBottomNavigation(BuildContext context) {
+    return FancyBottomNavigation(
+      circleColor: Color(0xffFDFDFD),
+      activeIconColor: Color(0xff3CBA54),
+      inactiveIconColor: Color(0xffA4A4A4),
+      tabs: [
+        TabData(
+          iconData: Icons.home,
+          title: "Home",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+          ),
+        ),
+        TabData(
+          iconData: Icons.map_outlined,
+          title: "Map",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MapScreen(),
+            ),
+          ),
+        ),
+        TabData(
+          iconData: Icons.music_note_outlined,
+          title: "Music",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MusicScreen(),
+            ),
+          ),
+        ),
+        TabData(
+          iconData: Icons.favorite,
+          title: "Favourite",
+          onclick: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => FavouriteScreen(),
+            ),
+          ),
+        ),
+      ],
+      key: bottomNavigationKey,
+      onTabChangedListener: (position) {
+        setState(() {});
+      },
+    );
+  }
+}
