@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:solodrive_v2/screen/home_screen.dart';
 import 'package:solodrive_v2/widgets/custome_widgets.dart';
 
 class InformationScreen4 extends StatefulWidget {
@@ -41,7 +42,12 @@ class _InformationScreen4State extends State<InformationScreen4> {
             padding: const EdgeInsets.only(top: 50),
             child: FloatingActionButton.extended(
               onPressed: () {
-                Navigator.pushNamed(context, '/five');
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(),
+                  ),
+                );
               },
               label: const Text('GET STARTED'),
               backgroundColor: const Color(0xff3ABA75),

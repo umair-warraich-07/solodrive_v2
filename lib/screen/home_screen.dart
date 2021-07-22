@@ -299,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      drawer: appDrawer(),
+      drawer: homeAppDrawer(),
       bottomNavigationBar: buildFancyBottomNavigation(context),
     );
   }

@@ -44,8 +44,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
         ),
       ),
 
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 50),

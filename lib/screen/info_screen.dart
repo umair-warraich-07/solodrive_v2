@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:solodrive_v2/widgets/custome_widgets.dart';
 
+import 'info_screen_2.dart';
+
 class InformationScreen extends StatefulWidget {
   const InformationScreen({Key? key}) : super(key: key);
 
@@ -26,7 +28,12 @@ class _InformationScreenState extends State<InformationScreen> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/second');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InformationScreen2(),
+                ),
+              );
             },
             child: const Text(
               'SoLoDrive',

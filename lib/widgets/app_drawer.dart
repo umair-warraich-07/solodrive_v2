@@ -70,3 +70,104 @@ class appDrawerButton extends StatelessWidget {
     );
   }
 }
+
+Widget homeAppDrawer() {
+  return Drawer(
+    // Add a ListView to the drawer. This ensures the user can scroll
+    // through the options in the drawer if there isn't enough vertical
+    // space to fit everything.
+    child: ListView(
+      // Important: Remove any padding from the ListView.
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        Container(
+          child: DrawerHeader(
+            decoration: BoxDecoration(
+              color: Color(0xff4885ED),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  height: 88,
+                  child: Image.asset(
+                    'images/soloDrive.png',
+                    height: 80,
+                    width: 51.04,
+                  ),
+                ),
+                const Text(
+                  'SoloDrive',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Container(
+          height: 150,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Image.asset('images/SoLo Profle Pic 3.png'),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Jeremy Smith',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                'Premium User',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ),
+        appDrawerButton(text: 'Purchase Premium', iconData: Icons.attach_money),
+        appDrawerButton(text: 'Rate App', iconData: Icons.star),
+        appDrawerButton(text: 'Help and Support', iconData: Icons.help),
+        appDrawerButton(text: 'Give Feedback', iconData: Icons.feedback),
+        appDrawerButton(text: 'Setting', iconData: Icons.settings),
+      ],
+    ),
+  );
+}
+
+class homeAppDrawerButton extends StatelessWidget {
+  final String text;
+  final IconData iconData;
+
+  homeAppDrawerButton({required this.text, required this.iconData});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      tileColor: Colors.white,
+      leading: Icon(
+        iconData,
+      ),
+      title: Text(
+        text,
+        style: const TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 24,
+        ),
+      ),
+    );
+  }
+}

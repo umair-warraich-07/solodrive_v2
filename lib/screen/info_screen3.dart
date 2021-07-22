@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:solodrive_v2/screen/info_screen4.dart';
 import 'package:solodrive_v2/widgets/custome_widgets.dart';
 
 class InformationScreen3 extends StatefulWidget {
@@ -47,7 +48,12 @@ class _InformationScreen3State extends State<InformationScreen3> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, '/forth');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => InformationScreen4(),
+            ),
+          );
         },
         label: const Text('Skip'),
       ),
